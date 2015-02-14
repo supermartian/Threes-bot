@@ -11,9 +11,9 @@ import copy
 
 class gameBoard:
 
-    def __init__(self, state = None):
+    def __init__(self, board = None):
         if state != None:
-            self.board = copy.deepcopy(state)
+            self.board = copy.deepcopy(board)
         else:
             self.board = [[0 for i in xrange(4)] for i in xrange(4)]
         random.seed()
@@ -35,6 +35,9 @@ class gameBoard:
                 n = 0
             self.board[x][y] = n
 
+        return self.board
+
+    def getBoard(self):
         return self.board
 
     "0: Up, 1: Right, 2: Down, 3: Left"
@@ -61,7 +64,7 @@ class gameBoard:
         elif move == 2 or move == 0:
             s = -1
             vrange = range(1, 4)
-            if move == 3:
+            if move == 0:
                 s = -1
             else:
                 s = 1
