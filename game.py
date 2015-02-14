@@ -90,12 +90,3 @@ class gameBoard:
     def printBoard(self):
         for i in range(4):
             print self.board[i]
-
-g = gameBoard()
-g.initRandomBoard()
-g.printBoard()
-while g:
-    m = random.randint(0, 4)
-    g = g.getNextState(m)
-    print ''
-    g.printBoard()
