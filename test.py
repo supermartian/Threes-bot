@@ -9,6 +9,7 @@
 import game
 import random
 import sys
+import ai
 
 def randomGameMoveTest():
     g = game.gameBoard()
@@ -36,9 +37,13 @@ def randomPlayTest():
             g = k
             continue
 
+        e = ai.boardEvaluator(g)
+        heuristic = e.boardHeuristic()
+
         randomtile = randomPool[random.randint(0, len(randomPool) -1)]
-        print "======", randomtile, "========"
+        print "==Next Coming==", randomtile, "========"
         g.printBoard()
+        print "==Evaluation===", heuristic, "========"
         print "==================="
         if not g.maxtile in randomPool:
             randomPool.append(g.maxtile)
@@ -69,9 +74,13 @@ def regularPlayTest():
             g = k
             continue
 
+        e = ai.boardEvaluator(g)
+        heuristic = e.boardHeuristic()
+
         randomtile = randomPool[random.randint(0, len(randomPool) -1)]
         print "======", randomtile, "========"
         g.printBoard()
+        print "==Evaluation===", heuristic, "========"
         print "==================="
         if not g.maxtile in randomPool:
             randomPool.append(g.maxtile)
