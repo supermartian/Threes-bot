@@ -12,8 +12,10 @@ import copy
 class gameBoard:
 
     def __init__(self, board = None):
-        if state != None:
+        self.maxtile = 3
+        if board != None:
             self.board = copy.deepcopy(board)
+            self.maxtile = max(map(max, board))
         else:
             self.board = [[0 for i in xrange(4)] for i in xrange(4)]
         random.seed()
@@ -35,9 +37,6 @@ class gameBoard:
                 n = 0
             self.board[x][y] = n
 
-        return self.board
-
-    def getBoard(self):
         return self.board
 
     "0: Up, 1: Right, 2: Down, 3: Left"
@@ -82,6 +81,27 @@ class gameBoard:
             return None
         else:
             return gameBoard(newboard)
+
+    def getNextStateWithRandomTile(self, move, randomtile):
+        nextg = self.getNextState(move)
+        if nextg == None:
+            return None
+
+        nextb = gameBoard(nextg.board)
+        if move == 0:
+            while not nextb.addTile(3, random.randint(0, 3), randomtile):
+                continue
+        elif move == 1:
+            while not nextb.addTile(random.randint(0, 3), 0, randomtile):
+                continue
+        elif move == 2:
+            while not nextb.addTile(0, random.randint(0, 3), randomtile):
+                continue
+        elif move == 3:
+            while not nextb.addTile(random.randint(0, 3), 3, randomtile):
+                continue
+
+        return nextb
 
     def addTile(self, x, y, tile):
         if self.board[x][y] != 0:
