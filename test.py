@@ -45,12 +45,17 @@ def regularPlayTest():
             g = k
             continue
 
+        randomtile = randomPool[random.randint(0, len(randomPool) -1)]
         print "======", randomtile, "========"
         g.printBoard()
-        randomtile = randomPool[random.randint(0, len(randomPool) -1)]
         print "==================="
         if not g.maxtile in randomPool:
             randomPool.append(g.maxtile)
 
-#randomGameMoveTest()
+print "Starting random initial state test"
+print "=================================="
+randomGameMoveTest()
+
+print "Starting regular gameplay test, use w s a d to control the game"
+print "=================================="
 regularPlayTest()
