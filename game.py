@@ -103,6 +103,13 @@ class gameBoard:
 
         return nextb
 
+    def isGameOver(self):
+        k = 0
+        for i in range(4):
+            if self.getNextState(i) == None:
+                k += 1
+        return True if k == 4 else False
+
     def addTile(self, x, y, tile):
         if self.board[x][y] != 0:
             return False
