@@ -12,13 +12,22 @@ import copy
 class gameBoard:
 
     def __init__(self, board = None):
+        self.randomPool = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 3, 3, 3, 3, 3]
         self.maxtile = 3
         if board != None:
             self.board = copy.deepcopy(board)
             self.maxtile = max(map(max, board))
+            self.updateRandomPool()
         else:
             self.board = [[0 for i in xrange(4)] for i in xrange(4)]
         random.seed()
+
+    def updateRandomPool(self):
+        i = 3
+        while i < self.maxtile:
+            if not i in self.randomPool:
+                self.randomPool.append(i)
+            i *= 2
 
     def initRandomBoard(self):
         self.board = [[0 for i in xrange(4)] for i in xrange(4)]

@@ -16,7 +16,6 @@ def randomGameMoveTest():
     g.initRandomBoard()
     while g != None:
         m = random.randint(0, 4)
-        print g.maxtile
         g.printBoard()
         g = g.getNextState(m)
 
@@ -24,8 +23,7 @@ def randomPlayTest():
     g = game.gameBoard()
     g.initRandomBoard()
     gameover = False
-    randomPool = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 3, 3, 3, 3, 3]
-    randomtile = randomPool[random.randint(0, len(randomPool) - 2)]
+    randomtile = g.randomPool[random.randint(0, len(g.randomPool) - 2)]
     print "======", randomtile, "========"
     g.printBoard()
     while not g.isGameOver():
@@ -40,20 +38,58 @@ def randomPlayTest():
         e = ai.boardEvaluator(g)
         heuristic = e.boardHeuristic()
 
-        randomtile = randomPool[random.randint(0, len(randomPool) -1)]
+        randomtile = g.randomPool[random.randint(0, len(g.randomPool) -1)]
         print "==Next Coming==", randomtile, "========"
         g.printBoard()
         print "==Evaluation===", heuristic, "========"
         print "==================="
-        if not g.maxtile in randomPool:
-            randomPool.append(g.maxtile)
+
+def naivePlayTest():
+    g = game.gameBoard()
+    g.initRandomBoard()
+    gameover = False
+    randomtile = g.randomPool[random.randint(0, len(g.randomPool) - 2)]
+    print "======", randomtile, "========"
+    g.printBoard()
+    while not g.isGameOver():
+        k = g
+        maxmove = 0
+        maxvalue = -1
+        for move in range(4):
+            state = ai.gameState()
+            state.taketurn = 1
+            state.nexttile = randomtile
+            state.lastmove = move
+            nextg = g.getNextState(move)
+            if nextg == None:
+                continue
+            s = ai.boardSolver(nextg)
+            v = s.evaluateMove(state, 3)
+            if v > maxvalue:
+                maxvalue = v
+                maxmove = move
+        maxmove = 3 if maxmove == -1 else maxmove
+        print v
+
+        g = g.getNextStateWithRandomTile(maxmove, randomtile)
+
+        if g == None:
+            g = k
+            continue
+
+        randomtile = g.randomPool[random.randint(0, len(g.randomPool) -1)]
+        print "==Next Coming==", randomtile, "========"
+        g.printBoard()
+        print "==Evaluation===", maxvalue, "========"
+        print "==Next Move ===", maxmove, "========"
+        print "==================="
+
 
 def regularPlayTest():
     g = game.gameBoard()
     g.initRandomBoard()
     gameover = False
-    randomPool = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 3, 3, 3, 3, 3]
-    randomtile = randomPool[random.randint(0, len(randomPool) - 2)]
+    randomtile = g.randomPool[random.randint(0, len(g.randomPool) - 2)]
     print "======", randomtile, "========"
     g.printBoard()
     while not g.isGameOver():
@@ -77,13 +113,11 @@ def regularPlayTest():
         e = ai.boardEvaluator(g)
         heuristic = e.boardHeuristic()
 
-        randomtile = randomPool[random.randint(0, len(randomPool) -1)]
+        randomtile = g.randomPool[random.randint(0, len(g.randomPool) -1)]
         print "======", randomtile, "========"
         g.printBoard()
         print "==Evaluation===", heuristic, "========"
         print "==================="
-        if not g.maxtile in randomPool:
-            randomPool.append(g.maxtile)
 
 print "Starting random initial state test"
 print "=================================="
@@ -93,6 +127,10 @@ print "Starting random gameplay test"
 print "=================================="
 randomPlayTest()
 
-print "Starting regular gameplay test, use w s a d to control the game"
+print "Starting naive AI gameplay test"
 print "=================================="
-regularPlayTest()
+naivePlayTest()
+
+#print "Starting regular gameplay test, use w s a d to control the game"
+#print "=================================="
+#regularPlayTest()
