@@ -55,22 +55,19 @@ def naivePlayTest():
         k = g
         maxmove = 0
         maxvalue = -1
+        state = ai.gameState()
+        state.taketurn = 1
+        state.nexttile = randomtile
         for move in range(4):
-            state = ai.gameState()
-            state.taketurn = 1
-            state.nexttile = randomtile
             state.lastmove = move
             nextg = g.getNextState(move)
             if nextg == None:
                 continue
             s = ai.boardSolver(nextg)
-            v = s.evaluateMove(state, 3)
+            v = s.evaluateMove(state, 4)
             if v > maxvalue:
                 maxvalue = v
                 maxmove = move
-        maxmove = 3 if maxmove == -1 else maxmove
-        print v
-
         g = g.getNextStateWithRandomTile(maxmove, randomtile)
 
         if g == None:
@@ -83,6 +80,37 @@ def naivePlayTest():
         print "==Evaluation===", maxvalue, "========"
         print "==Next Move ===", maxmove, "========"
         print "==================="
+
+def monteCarloPlayTest():
+    g = game.gameBoard()
+    g.initRandomBoard()
+    gameover = False
+    randomtile = g.randomPool[random.randint(0, len(g.randomPool) - 2)]
+    print "======", randomtile, "========"
+    g.printBoard()
+    while not g.isGameOver():
+        k = g
+        maxmove = 0
+        maxvalue = -1
+        for move in range(4):
+            s = ai.monteCarloSolver(g)
+            v = s.evaluateMove(move, 1000)
+            if v > maxvalue:
+                maxvalue = v
+                maxmove = move
+        g = g.getNextStateWithRandomTile(maxmove, randomtile)
+
+        if g == None:
+            g = k
+            continue
+
+        randomtile = g.randomPool[random.randint(0, len(g.randomPool) -1)]
+        print "==Next Coming==", randomtile, "========"
+        g.printBoard()
+        print "==Evaluation===", maxvalue, "========"
+        print "==Next Move ===", maxmove, "========"
+        print "==================="
+
 
 
 def regularPlayTest():
@@ -130,6 +158,10 @@ randomPlayTest()
 print "Starting naive AI gameplay test"
 print "=================================="
 naivePlayTest()
+
+#print "Starting Monte Carlo AI gameplay test"
+#print "=================================="
+#monteCarloPlayTest()
 
 #print "Starting regular gameplay test, use w s a d to control the game"
 #print "=================================="
